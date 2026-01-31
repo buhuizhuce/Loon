@@ -2,18 +2,13 @@
 #!desc=允许引用 Github 私有仓库/Gist 中的订阅、分流、重写、脚本等文件
 #!category=Frank
 
-#!arguments=username:GITHUB_USERNAME,token:GITHUB_TOKEN
-#!arguments-desc=
-[参数设置]
-username: 填入 GitHub 的用户名
-token: 填入 GitHub 生成的 Token
-
-[Token 获取方式]
-头像菜单 -> Settings -> Developer settings -> Personal access tokens -> Generate new token -> 勾选 gist 权限后生成
+[Argument]
+username=input, "", tag=GitHub 用户名, desc=请输入你的 GitHub 用户名
+token=input, "", tag=GitHub Token, desc=请输入你的 GitHub Token（需包含 gist 权限）
 
 [Header Rewrite]
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{{{username}}} header-del Authorization
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{{{username}}} header-add Authorization "token {{{token}}}"
+http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-del Authorization
+http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-add Authorization "token {token}"
 
 [MITM]
 hostname = %APPEND% raw.githubusercontent.com, gist.githubusercontent.com
