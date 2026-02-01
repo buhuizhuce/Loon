@@ -1,21 +1,16 @@
 #!name=📌 Github Private
 #!desc=允许引用 Github 私有仓库 / 私有 Gist 中的订阅、分流、复写、脚本等文件
 #!author=Frank
-#!icon=https://raw.githubusercontent.com/Peng-YM/QuanX/master/Icon/GitHub.png
-#!tag=GitHub,Private,订阅
-#!loon_version=3.2.1(372)
+#!tag=GitHub,Private
+#!loon_version=3.2.3(749)
 
 [Argument]
-username = input,"",tag=GitHub 用户名,desc=填入 GitHub 的用户名
-token = input,"",tag=GitHub Token,desc=填入 GitHub 生成的 Token（需包含 gist 或 repo 权限）
+username = input,"",tag=GitHub 用户名,desc=填写 GitHub 用户名
+token = input,"",tag=GitHub Token,desc=填写 GitHub Token（需 gist 或 repo 权限）
 
 [rewrite]
-# 删除原有 Authorization 头
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-del Authorization
-
-# 注入 GitHub 私有访问 Token
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-add Authorization token\ {token}
+^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-del Authorization
+^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-add Authorization token\x20{token}
 
 [mitm]
-raw.githubusercontent.com
-gist.githubusercontent.com
+raw.githubusercontent.com,gist.githubusercontent.com
