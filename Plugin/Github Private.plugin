@@ -1,16 +1,17 @@
 #!name=GitHub Private 资源访问
-#!desc=允许 Loon 引用 GitHub 私有仓库或 Gist 中的文件。
+#!desc=允许引用 Github 私有仓库/Gist 中的订阅分流、重写、脚本等文件。
 #!author=Frank
 #!icon=https://raw.githubusercontent.com/luestr/IconHub/master/App/Github.png
 
 [Argument]
-# 配置 UI 界面显示的参数
-username = input, "你的用户名", tag=GitHub 用户名, desc=请输入你的 GitHub 用户名
-token = input, "", tag=GitHub Token, desc=填入 Personal Access Token (需勾选 gist/repo 权限)
+username = input, "", tag=GitHub 用户名, desc=填入 GitHub 用户名
+token = input, "", tag=GitHub Token, desc=填入 GitHub 生成的 Personal Access Token
 
 [Rewrite]
-# 这是一个黑科技方案：匹配 User-Agent 并在其后强行插入换行和 Authorization
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-replace User-Agent "(.*)" "$1\r\nAuthorization: token {token}"
+# 删除可能存在的旧 Authorization
+http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-del Authorization
+# 添加新的 Authorization，使用 {参数名} 引用 Argument 中的值
+http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-add Authorization "token {token}"
 
 [MITM]
 hostname = raw.githubusercontent.com, gist.githubusercontent.com
