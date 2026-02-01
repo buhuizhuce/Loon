@@ -9,8 +9,8 @@ username = input,"",tag=Username,desc=填写 GitHub用户名
 token  = input,"",tag=GitHub Token,desc=填写 GitHub Token（需 gist 或 repo 权限）
 
 [Rewrite]
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-del Authorization
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-add Authorization "token {token}"
+^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-del Authorization
+^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-add Authorization "token {token}"
 
 
 [MITM]
