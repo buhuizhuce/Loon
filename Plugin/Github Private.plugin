@@ -9,9 +9,9 @@ token = input, "", tag=GitHub Token, desc=填入 GitHub 生成的 Personal Acces
 
 [Rewrite]
 # 删除可能存在的旧 Authorization
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-del Authorization
+^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-del Authorization
 # 添加新的 Authorization，使用 {参数名} 引用 Argument 中的值
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-add Authorization "token {token}"
+^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-add Authorization "token {token}"
 
 [MITM]
 hostname = raw.githubusercontent.com, gist.githubusercontent.com
