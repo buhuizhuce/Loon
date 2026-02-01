@@ -13,4 +13,4 @@ token = input,"",tag=GitHub Token,desc=填写 GitHub Token（需 gist 或 repo �
 ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-add Authorization token\x20{token}
 
 [mitm]
-raw.githubusercontent.com,gist.githubusercontent.com
+hostname = raw.githubusercontent.com,gist.githubusercontent.com
