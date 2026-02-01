@@ -1,5 +1,5 @@
 #!name=GitHub Private 资源访问
-#!desc=允许引用 Github 私有仓库/Gist 中的订阅分流、重写、脚本等文件。
+#!desc=允许引用 Github 私有仓库/Gist 中的文件。在插件设置中填入用户名和 Token。
 #!author=Frank
 #!icon=https://raw.githubusercontent.com/luestr/IconHub/master/App/Github.png
 
@@ -8,9 +8,14 @@ username = input, "", tag=GitHub 用户名, desc=填入 GitHub 用户名
 token = input, "", tag=GitHub Token, desc=填入 GitHub 生成的 Personal Access Token
 
 [Rewrite]
-# 逻辑：匹配 User-Agent 的全部内容，并在其后换行并添加 Authorization 请求头
-# (?={username}) 用于确保只在你自己的路径下注入，避免 Token 泄露
-^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-replace User-Agent "(.*)" "$1\r\nAuthorization: token {token}"
+# 1. 先尝试删除可能存在的旧认证头
+# 格式：正则表达式 header-del 键名
+^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-del Authorization
+
+# 2. 添加新的 Authorization Header
+# 格式：正则表达式 header-add 键名 值
+# 注意：token 和 {token} 之间的空格必须转义为 \x20
+^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-add Authorization token\x20{token}
 
 [MITM]
 hostname = raw.githubusercontent.com, gist.githubusercontent.com
