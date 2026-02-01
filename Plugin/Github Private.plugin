@@ -6,9 +6,8 @@
 username=input, "", tag=GitHub 用户名, desc=请输入你的 GitHub 用户名
 token=input, "", tag=GitHub Token, desc=请输入你的 GitHub Token（需包含 gist 权限）
 
-[Header Rewrite]
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-del Authorization
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-add Authorization "token {token}"
-
 [MITM]
-hostname = %APPEND% raw.githubusercontent.com, gist.githubusercontent.com
+hostname = raw.githubusercontent.com, gist.githubusercontent.com
+
+[Script]
+http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com, requires-body=0, script-path=https://raw.githubusercontent.com/Peng-YM/QuanX/master/Rewrites/GithubPrivate/github-private-repo.js, tag=Github Private, argument=[{username},{token}]
