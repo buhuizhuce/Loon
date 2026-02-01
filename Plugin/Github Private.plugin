@@ -14,8 +14,7 @@ token = input, "", tag=GitHub Token, desc=填入 GitHub 生成的 Personal Acces
 
 # 2. 添加新的 Authorization Header
 # 格式：正则表达式 header-add 键名 值
-# 注意：token 和 {token} 之间的空格必须转义为 \x20
-^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-add Authorization token\x20{token}
+^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-add Authorization token\ {token}
 
 [MITM]
 hostname = raw.githubusercontent.com, gist.githubusercontent.com
