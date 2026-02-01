@@ -9,9 +9,8 @@ username = input, "你的用户名", tag=GitHub 用户名, desc=请输入你的 
 token = input, "", tag=GitHub Token, desc=填入 Personal Access Token (需勾选 gist/repo 权限)
 
 [Rewrite]
-# 使用 {参数名} 语法进行引用
-# 只有匹配到你自己的用户名时才会注入 Header，保护隐私
-http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-add Authorization "token {token}"
+# 这是一个黑科技方案：匹配 User-Agent 并在其后强行插入换行和 Authorization
+http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-replace User-Agent "(.*)" "$1\r\nAuthorization: token {token}"
 
 [MITM]
 hostname = raw.githubusercontent.com, gist.githubusercontent.com
