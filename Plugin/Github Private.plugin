@@ -1,17 +1,17 @@
-#!name=📌 Github Private
-#!desc=允许引用 Github 私有仓库 / 私有 Gist 中的订阅、分流、复写、脚本等文件
+#!name=GitHub Private 资源访问
+#!desc=允许 Loon 引用 GitHub 私有仓库或 Gist 中的文件。
 #!author=Frank
-#!tag=GitHub,Private
-#!loon_version=3.2.3(749)
+#!icon=https://raw.githubusercontent.com/luestr/IconHub/master/App/Github.png
 
 [Argument]
-username = input,"",tag=Username,desc=填写 GitHub用户名
-token  = input,"",tag=GitHub Token,desc=填写 GitHub Token（需 gist 或 repo 权限）
+# 配置 UI 界面显示的参数
+username = input, "你的用户名", tag=GitHub 用户名, desc=请输入你的 GitHub 用户名
+token = input, "", tag=GitHub Token, desc=填入 Personal Access Token (需勾选 gist/repo 权限)
 
 [Rewrite]
-^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-del Authorization
-^https?:\/\/(raw|gist)\.githubusercontent\.com\/{username} header-add Authorization "token {token}"
-
+# 使用 {参数名} 语法进行引用
+# 只有匹配到你自己的用户名时才会注入 Header，保护隐私
+http-request ^https?:\/\/(raw|gist)\.githubusercontent\.com\/(?={username}) header-add Authorization "token {token}"
 
 [MITM]
 hostname = raw.githubusercontent.com, gist.githubusercontent.com
